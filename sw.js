@@ -9,16 +9,19 @@ const ASSETS = [
 
 // Install Event
 self.addEventListener('install', (e) => {
-    console.log('[SW] Install');
+    console.log('[SW] Install event fired. Assets to cache:', ASSETS);
     e.waitUntil(
-        caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+        caches.open(CACHE_NAME).then((cache) => {
+            console.log('[SW] Caching all assets...');
+            return cache.addAll(ASSETS);
+        })
     );
     self.skipWaiting();
 });
 
 // Activate Event
 self.addEventListener('activate', (e) => {
-    console.log('[SW] Activate');
+    console.log('[SW] Activate event fired. Taking control of clients.');
     e.waitUntil(
         caches.keys().then((keys) => {
             return Promise.all(keys.map((key) => {
